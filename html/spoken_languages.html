@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Spoken Languages</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">CRUD Spoken Languages</h2>
+        <!-- Formulario para agregar registro -->
+        <form id="spokenForm" class="mb-4">
+            <div class="row g-2">
+                <div class="col-md-2">
+                    <input type="number" id="countryId" class="form-control" placeholder="Country ID" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="number" id="languageId" class="form-control" placeholder="Language ID" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" id="official" class="form-control" placeholder="Official" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="description" class="form-control" placeholder="Description" required>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Agregar</button>
+                </div>
+            </div>
+        </form>
+        <!-- Tabla de registros -->
+        <table class="table table-bordered" id="spokenTable">
+            <thead class="table-dark">
+                <tr>
+                    <th>Country ID</th>
+                    <th>Language ID</th>
+                    <th>Official</th>
+                    <th>Description</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Filas generadas dinámicamente -->
+            </tbody>
+        </table>
+    </div>
+    <!-- Modal para editar registro -->
+    <div class="modal fade" id="editSpokenModal" tabindex="-1" aria-labelledby="editSpokenModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editSpokenModalLabel">Editar Spoken Language</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="editSpokenForm">
+              <div class="mb-2">
+                <label for="editCountryId" class="form-label">Country ID</label>
+                <input type="number" class="form-control" id="editCountryId" required>
+              </div>
+              <div class="mb-2">
+                <label for="editLanguageId" class="form-label">Language ID</label>
+                <input type="number" class="form-control" id="editLanguageId" required>
+              </div>
+              <div class="mb-2">
+                <label for="editOfficial" class="form-label">Official</label>
+                <input type="text" class="form-control" id="editOfficial" required>
+              </div>
+              <div class="mb-2">
+                <label for="editDescription" class="form-label">Description</label>
+                <input type="text" class="form-control" id="editDescription" required>
+              </div>
+              <button type="submit" class="btn btn-success">Guardar Cambios</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let spokenLanguages = [];
+        let editSpokenIndex = null;
+
+        // Agregar registro
+        document.getElementById('spokenForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const countryId = document.getElementById('countryId').value;
+            const languageId = document.getElementById('languageId').value;
+            const official = document.getElementById('official').value;
+            const description = document.getElementById('description').value;
+            spokenLanguages.push({ countryId, languageId, official, description });
+            this.reset();
+            renderSpokenTable();
+        });
+
+        // Renderizar tabla
+        function renderSpokenTable() {
+            const tbody = document.querySelector('#spokenTable tbody');
+            tbody.innerHTML = '';
+            spokenLanguages.forEach((item, i) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.countryId}</td>
+                    <td>${item.languageId}</td>
+                    <td>${item.official}</td>
+                    <td>${item.description}</td>
+                    <td>
+                        <button class='btn btn-warning btn-sm me-2' onclick='editSpoken(${i})'>Editar</button>
+                        <button class='btn btn-danger btn-sm' onclick='deleteSpoken(${i})'>Eliminar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Eliminar registro
+        function deleteSpoken(index) {
+            spokenLanguages.splice(index, 1);
+            renderSpokenTable();
+        }
+
+        // Editar registro
+        window.editSpoken = function(index) {
+            editSpokenIndex = index;
+            document.getElementById('editCountryId').value = spokenLanguages[index].countryId;
+            document.getElementById('editLanguageId').value = spokenLanguages[index].languageId;
+            document.getElementById('editOfficial').value = spokenLanguages[index].official;
+            document.getElementById('editDescription').value = spokenLanguages[index].description;
+            var editModal = new bootstrap.Modal(document.getElementById('editSpokenModal'));
+            editModal.show();
+        }
+
+        // Guardar cambios de edición
+        document.getElementById('editSpokenForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            spokenLanguages[editSpokenIndex].countryId = document.getElementById('editCountryId').value;
+            spokenLanguages[editSpokenIndex].languageId = document.getElementById('editLanguageId').value;
+            spokenLanguages[editSpokenIndex].official = document.getElementById('editOfficial').value;
+            spokenLanguages[editSpokenIndex].description = document.getElementById('editDescription').value;
+            renderSpokenTable();
+            var editModal = bootstrap.Modal.getInstance(document.getElementById('editSpokenModal'));
+            editModal.hide();
+        });
+    </script>
+</body>
+</html>
