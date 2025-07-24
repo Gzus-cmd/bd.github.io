@@ -1,0 +1,45 @@
+/* Barra de navegación */
+.navbar {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Card principal */
+.card {
+    border-radius: 1rem;
+    border: none;
+}
+.card-header {
+    border-radius: 1rem 1rem 0 0;
+}
+
+/* Formulario */
+#spokenForm input {
+    border-radius: 0.5rem;
+}
+#spokenForm .btn {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+/* Tabla */
+.table {
+    background: #fff;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.table th, .table td {
+    vertical-align: middle !important;
+}
+.table-primary {
+    background-color: #0d6efd22;
+}
+.table-hover tbody tr:hover {
+    background-color: #e3f2fd;
+}
+
+/* Responsive para la tabla */
+.table-responsive {
+    border-radius: 0.5rem;
+    overflow: auto;
+}
